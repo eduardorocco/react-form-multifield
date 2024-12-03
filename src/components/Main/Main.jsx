@@ -2,29 +2,59 @@ import style from './Main.module.css'
 import Card from "../Card/Card"
 import { posts } from '../../data/posts'
 import { useState } from 'react'
+import { useEffect } from 'react'
+
+
+const initialFormData = {
+    id: '',
+    title: '',
+    image: undefined,
+    content: '',
+    tags: [],
+    published: true
+}
+
+
 
 export default function Main() {
+
+
     const [publishedPosts, setPublishedPosts] = useState(posts.filter((post) => post.published === true))
-    const [title, setTitle] = useState('')
+
+    const [formData, setFormData] = useState(initialFormData)
+
+    function handleFormData(e) {
+
+        const key = e.target.name
+        const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value
+
+        const newFormData = {
+            ...formData,
+            [key]: value,
+        }
+
+        setFormData(newFormData)
+
+    }
+
 
     function addPost(event) {
         event.preventDefault()
 
-        const newTitle = title
-        if (newTitle === '') return
+        if (formData.title.trim() === '') return
 
-        const post = {
+        const newPost = {
             id: Date.now(),
-            title: newTitle,
-            image: undefined,
-            content: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus, repudiandae.',
-            tags: [],
-            published: true
+            ...formData,
+            tags: formData.tags.split(',').map((ing) => ing.trim())
         }
 
-        setPublishedPosts([...publishedPosts, post])
-        setTitle('')
+        setPublishedPosts([...publishedPosts, posts])
+
     }
+
+    setPizzas([...pizzas,newPizza])
+    
 
     function deletePost(id) {
 
@@ -34,13 +64,16 @@ export default function Main() {
     return (
         <main>
             <div className="container">
-                <form onSubmit={addPost} action="">
+                <form onSubmit={addPost}>
                     <input
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
                         type="text"
                         placeholder="Titolo del post"
                     />
+                    <input type="text" placeholder='Contenuto' />
+                    <input type="text" placeholder='Url immagine' />
+                    <input type="text" placeholder='Tags' />
+                    <input type="checkbox" />
+                    <label htmlFor="checkbox">Pubblica</label>
                     <input type="submit" />
                 </form>
             </div>
