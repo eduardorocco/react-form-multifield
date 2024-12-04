@@ -53,7 +53,8 @@ export default function Main() {
     return (
         <main>
             <div className="container">
-                <form onSubmit={addPost}>
+                <form onSubmit={addPost} className={style.form}>
+                    <h2>Aggiungi un nuovo post</h2>
                     <input
                         type="text"
                         name="title"
@@ -82,14 +83,20 @@ export default function Main() {
                         value={formData.tags}
                         onChange={handleFormData}
                     />
-                    <input
-                        type="checkbox"
-                        name="published"
-                        checked={formData.published}
-                        onChange={handleFormData}
-                    />
-                    <label htmlFor="checkbox">Pubblica</label>
-                    <input type="submit" />
+                    <div className={style.checkbox}>
+                        <input
+                            type="checkbox"
+                            name="published"
+                            checked={formData.published}
+                            onChange={handleFormData}
+                        />
+                        <label htmlFor="checkbox">Pubblica</label>
+                    </div>
+
+                    
+                    <input className={style.submit} type="submit" />
+                    
+                    
                 </form>
             </div>
             <div className="container">
