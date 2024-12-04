@@ -2,62 +2,51 @@ import style from './Main.module.css'
 import Card from "../Card/Card"
 import { posts } from '../../data/posts'
 import { useState } from 'react'
-import { useEffect } from 'react'
-
 
 const initialFormData = {
     id: '',
     title: '',
-    image: undefined,
+    image: '',
     content: '',
-    tags: [],
+    tags: '',
     published: true
 }
 
-
-
 export default function Main() {
-
-
     const [publishedPosts, setPublishedPosts] = useState(posts.filter((post) => post.published === true))
-
     const [formData, setFormData] = useState(initialFormData)
 
     function handleFormData(e) {
-
-        const key = e.target.name
+        const key = e.target.name;
         const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value
 
-        const newFormData = {
+        setFormData({
             ...formData,
             [key]: value,
-        }
-
-        setFormData(newFormData)
-
+        });
     }
-
 
     function addPost(event) {
         event.preventDefault()
 
+
         if (formData.title.trim() === '') return
+
 
         const newPost = {
             id: Date.now(),
             ...formData,
-            tags: formData.tags.split(',').map((ing) => ing.trim())
-        }
+            tags: formData.tags.split(',').map((tag) => tag.trim())
+        };
 
-        setPublishedPosts([...publishedPosts, posts])
 
+        setPublishedPosts([...publishedPosts, newPost])
+
+
+        setFormData(initialFormData)
     }
 
-    setPizzas([...pizzas,newPizza])
-    
-
     function deletePost(id) {
-
         setPublishedPosts(publishedPosts.filter(post => post.id !== id))
     }
 
@@ -67,12 +56,38 @@ export default function Main() {
                 <form onSubmit={addPost}>
                     <input
                         type="text"
+                        name="title"
                         placeholder="Titolo del post"
+                        value={formData.title}
+                        onChange={handleFormData}
                     />
-                    <input type="text" placeholder='Contenuto' />
-                    <input type="text" placeholder='Url immagine' />
-                    <input type="text" placeholder='Tags' />
-                    <input type="checkbox" />
+                    <input
+                        type="text"
+                        name="content"
+                        placeholder="Contenuto"
+                        value={formData.content}
+                        onChange={handleFormData}
+                    />
+                    <input
+                        type="text"
+                        name="image"
+                        placeholder="Url immagine"
+                        value={formData.image}
+                        onChange={handleFormData}
+                    />
+                    <input
+                        type="text"
+                        name="tags"
+                        placeholder="Tags"
+                        value={formData.tags}
+                        onChange={handleFormData}
+                    />
+                    <input
+                        type="checkbox"
+                        name="published"
+                        checked={formData.published}
+                        onChange={handleFormData}
+                    />
                     <label htmlFor="checkbox">Pubblica</label>
                     <input type="submit" />
                 </form>
@@ -94,3 +109,5 @@ export default function Main() {
         </main>
     )
 }
+
+
